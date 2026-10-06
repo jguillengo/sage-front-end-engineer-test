@@ -22,7 +22,7 @@ Ext.application({
             renderTo   : Ext.getBody(),
             height     : 400,
             width      : 700,
-            // buffered rendering is on by default for classic grids;
+            // Buffered rendering is on by default for classic grids;
             // only ~visible rows exist, widgets are pooled & recycled.
             store      : {
                 fields : ['id', 'name', 'department', 'active', 'locked'],
@@ -48,19 +48,14 @@ Ext.application({
                     width     : 80,
                     renderer  : function (v) { return v ? 'Locked' : ''; }
                 },
-
-                // ====================================================
-                // NAIVE / BROKEN widget column — THIS is what you fix.
-                // ====================================================
                 {
                     xtype : 'widgetcolumn',
                     text  : 'Status',
                     width : 170,
 
-                    // state is pushed onto the (recycled) widget
-                    // asynchronously. By the time the timer fires, the same
-                    // widget instance may already serve a DIFFERENT record.
                     onWidgetAttach: function (col, widget, rec) {
+                        // Widgets are recycled, so always derive their state from the
+                        // record currently attached to them.
                         widget.setText(rec.get('active') ? 'Deactivate' : 'Activate');
                         widget.setDisabled(!!rec.get('locked'));
                     },
@@ -69,6 +64,7 @@ Ext.application({
                         xtype: 'button',
 
                         handler: function () {
+                            pues// Resolve the record currently associated with this recycled widget.
                             var rec = this.getWidgetRecord(),
                                 active = !rec.get('active');
 
