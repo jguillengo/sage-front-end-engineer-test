@@ -60,22 +60,22 @@ Ext.application({
                     // state is pushed onto the (recycled) widget
                     // asynchronously. By the time the timer fires, the same
                     // widget instance may already serve a DIFFERENT record.
-                    onWidgetAttach : function (col, widget, rec) {
-                        Ext.defer(function () {
-                            widget.setText(rec.get('active') ? 'Deactivate' : 'Activate');
-                            widget.setDisabled(!!rec.get('locked'));
-                        }, 30);
-
-                        col._lastRecord = rec;
+                    onWidgetAttach: function (col, widget, rec) {
+                        widget.setText(rec.get('active') ? 'Deactivate' : 'Activate');
+                        widget.setDisabled(!!rec.get('locked'));
                     },
 
-                    widget : {
-                        xtype   : 'button',
-                        handler : function () {
-                            var col = this.getWidgetColumn(),
-                                rec = col._lastRecord;
+                    widget: {
+                        xtype: 'button',
 
-                            rec.set('active', !rec.get('active'));
+                        handler: function () {
+                            var rec = this.getWidgetRecord(),
+                                active = !rec.get('active');
+
+                            rec.set('active', active);
+
+                            this.setText(active ? 'Deactivate' : 'Activate');
+                            this.setDisabled(!!rec.get('locked'));
                         }
                     }
                 }
