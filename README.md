@@ -72,3 +72,49 @@ Star clicks are handled through a delegated listener on the component's root ele
   - `on()`
     - `delegate`
   - `click`
+
+## Task 3 — Reactive timesheet totals & validation
+
+### Problem
+
+The original `totalHours` formula only depends on the `entries` store reference. Editing a field inside one of its records does not replace that store instance, so the formula does not reliably react to record changes.
+
+Both the running total and the validation state need to react to edits, additions and removals while remaining inside the ViewModel.
+
+### Solution
+
+`totalHours` uses an explicit deep binding to the `entries` store. This allows the formula to react to changes inside its records and recalculate the total through `Store.sum()`.
+
+A separate `hasInvalidHours` formula uses the same deep-binding pattern and `Store.findBy()` to detect the first row whose `hours` value falls outside the valid `0–24` range.
+
+`saveDisabled` then depends on the two derived formulas instead of inspecting the store directly. This keeps the final business rule declarative and avoids recalculating `totalHours`.
+
+### Design choice
+
+The total and row validation are kept as two small deep-bound formulas. They could be combined into a single aggregate formula that calculates both values in one pass, but that would introduce an additional intermediate structure for a very small timesheet store.
+
+Keeping them separate follows the documented advanced store-binding pattern, avoids duplicating the total calculation, and keeps each formula focused on one responsibility.
+
+### References
+
+- [Ext.app.ViewModel — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.app.ViewModel.html)
+  - Binding
+    - Bind Options
+      - Deep Binding
+      - Binding Timings
+  - Stores
+    - Advanced Store Binding
+
+- [Ext.app.bind.Formula — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.app.bind.Formula.html)
+  - Formula Basics
+    - Data Dependencies
+    - The Getter Method
+  - Explicit Binding
+
+- [Ext.data.Store — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.data.Store.html)
+  - `sum()`
+  - `findBy()`
+
+- [Ext.data.Model — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.data.Model.html)
+  - `get()`
+
