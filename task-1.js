@@ -53,17 +53,17 @@ Ext.application({
                     text  : 'Status',
                     width : 170,
 
-                    onWidgetAttach: function (col, widget, rec) {
+                    onWidgetAttach : function (col, widget, rec) {
                         // Widgets are recycled, so always derive their state from the
                         // record currently attached to them.
                         widget.setText(rec.get('active') ? 'Deactivate' : 'Activate');
                         widget.setDisabled(!!rec.get('locked'));
                     },
 
-                    widget: {
-                        xtype: 'button',
+                    widget : {
+                        xtype : 'button',
 
-                        handler: function () {
+                        handler : function () {
                             // Resolve the record currently associated with this recycled widget.
                             var rec = this.getWidgetRecord(),
                                 active = !rec.get('active');
@@ -71,7 +71,6 @@ Ext.application({
                             rec.set('active', active);
 
                             this.setText(active ? 'Deactivate' : 'Activate');
-                            this.setDisabled(!!rec.get('locked'));
                         }
                     }
                 }
