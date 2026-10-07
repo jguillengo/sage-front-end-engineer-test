@@ -138,14 +138,19 @@ A final `then()` centralizes success and failure cleanup. The loading mask is re
 
 ### References
 
-- Ext.Deferred — Ext JS 7.5.0 Classic
-  - `all()`
-  - `then()`
+### References
 
-- Ext.Component — Ext JS 7.5.0 Classic
+- [Ext.Deferred — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.Deferred.html)
+  - `all()` — static method
+  - inherited from `Ext.promise.Deferred`
+    - `then()`
+
+- [Ext.Component — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.Component.html)
   - `setLoading()`
-  - `destroyed`
+  - inherited from `Ext.Base`
+    - `destroyed`
 
-- Ext.MessageBox / Ext.Msg — Ext JS 7.5.0 Classic
+- [Ext.MessageBox — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.MessageBox.html)
+  - `Ext.Msg` singleton alias
   - `alert()`
 
