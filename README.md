@@ -118,3 +118,34 @@ Keeping them separate follows the documented advanced store-binding pattern, avo
 - [Ext.data.Model — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.data.Model.html)
   - `get()`
 
+## Task 4 — Async orchestration with Ext.Deferred
+
+### Problem
+
+The dashboard depends on three asynchronous operations with different dependencies.
+
+Profile and permissions are independent and should load in parallel, while the timesheet can only be requested once the profile provides the employee ID. The view must remain masked throughout the operation, handle failures through a single error path and avoid interacting with a view that may have been destroyed before the asynchronous work completes.
+
+### Solution
+
+`Ext.Deferred.all()` starts the profile and permissions requests together and resolves with both results.
+
+Once they are available, the profile's `employeeId` is used to load the dependent timesheet. The three results are then combined into the object expected by `renderDashboard()`.
+
+Rendering is guarded by the view's `destroyed` state so a completed asynchronous operation does not attempt to update a view that no longer exists.
+
+A final `then()` centralizes success and failure cleanup. The loading mask is removed whenever the view still exists, while failures show a single error dialog and remain rejected for callers chaining onto the returned promise.
+
+### References
+
+- Ext.Deferred — Ext JS 7.5.0 Classic
+  - `all()`
+  - `then()`
+
+- Ext.Component — Ext JS 7.5.0 Classic
+  - `setLoading()`
+  - `destroyed`
+
+- Ext.MessageBox / Ext.Msg — Ext JS 7.5.0 Classic
+  - `alert()`
+
