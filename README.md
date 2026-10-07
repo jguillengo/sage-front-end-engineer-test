@@ -154,3 +154,58 @@ A final `then()` centralizes success and failure cleanup. The loading mask is re
   - `Ext.Msg` singleton alias
   - `alert()`
 
+## Task 5 — Large grid: filtering, bulk update & renderer hygiene
+
+### Problem
+
+The directory contains 10,000 records, so the search, bulk update and salary renderer need to avoid unnecessary work.
+
+The live search must not re-filter on every keystroke or accumulate filters. The department raise must update every matching record, including records currently hidden by the search filter, while batching the changes. The salary renderer must remain synchronous and limited to formatting and cell presentation.
+
+### Solution
+
+The search listener uses the documented `buffer` option to debounce changes. Search is represented by a single identified `Ext.util.Filter`; adding another filter with the same key replaces the previous one, while clearing the search removes it from the store's filter collection.
+
+The department raise uses a local `raiseRate` to express the 10% business rule explicitly. The updates are wrapped in `beginUpdate()` / `endUpdate()` and performed through `Model.set()`. Store iteration uses `{ filtered: true }` so employees hidden by the current search filter are still included.
+
+The salary renderer formats the value with `Ext.util.Format.currency()`, applies the red text through the renderer's `metaData.tdStyle`, and HTML-encodes the returned string with `Ext.String.htmlEncode()`.
+
+### References
+
+- [Ext.data.Store — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.data.Store.html)
+  - inherited from `Ext.data.AbstractStore`
+    - `getFilters()`
+    - `beginUpdate()`
+    - `endUpdate()`
+  - `each()`
+    - `includeOptions.filtered`
+
+- [Ext.util.Filter — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.util.Filter.html)
+  - `id`
+  - `property`
+  - `value`
+  - `anyMatch`
+  - `caseSensitive`
+
+- [Ext.util.FilterCollection — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.util.FilterCollection.html)
+  - inherited from `Ext.util.Collection`
+    - `add()`
+    - `removeByKey()`
+
+- [Ext.mixin.Observable — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.mixin.Observable.html)
+  - `addListener()` / `on()`
+    - listener option `buffer`
+
+- [Ext.data.Model — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.data.Model.html)
+  - `get()`
+  - `set()`
+
+- [Ext.grid.column.Column — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.grid.column.Column.html)
+  - `renderer`
+    - `metaData.tdStyle`
+
+- [Ext.util.Format — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.util.Format.html)
+  - `currency()`
+
+- [Ext.String — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.String.html)
+  - `htmlEncode()`
