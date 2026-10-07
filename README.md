@@ -24,13 +24,14 @@ Both the button text and disabled state are reassigned whenever the widget is at
 
 - [Ext.button.Button — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.button.Button.html)
   - `setText()`
-  - `setDisabled()`
+  - inherited from `Ext.Component`
+    - `setDisabled()`
 
 - [Ext.data.Model — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.data.Model.html)
   - `get()`
   - `set()`
 
-  ## Task 2 — A custom two-way bindable component
+## Task 2 — A custom two-way bindable component
 
 ### Problem
 
@@ -61,9 +62,11 @@ Star clicks are handled through a delegated listener on the component's root ele
 
 - [Ext.Component — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.Component.html)
   - `rendered`
-  - `afterRender`
+  - `defaultBindProperty`
   - `getEl()`
   - `setHtml()`
+  - inherited from `Ext.util.Renderable`
+    - `afterRender`
 
 - [Ext.Base — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.Base.html)
   - `callParent()`
@@ -138,8 +141,6 @@ A final `then()` centralizes success and failure cleanup. The loading mask is re
 
 ### References
 
-### References
-
 - [Ext.Deferred — Ext JS 7.5.0 Classic](https://docs.sencha.com/extjs/7.5.0/classic/Ext.Deferred.html)
   - `all()` — static method
   - inherited from `Ext.promise.Deferred`
@@ -166,7 +167,7 @@ The live search must not re-filter on every keystroke or accumulate filters. The
 
 The search listener uses the documented `buffer` option to debounce changes. Search is represented by a single identified `Ext.util.Filter`; adding another filter with the same key replaces the previous one, while clearing the search removes it from the store's filter collection.
 
-The department raise uses a local `raiseRate` to express the 10% business rule explicitly. The updates are wrapped in `beginUpdate()` / `endUpdate()` and performed through `Model.set()`. Store iteration uses `{ filtered: true }` so employees hidden by the current search filter are still included.
+The department raise uses a local `raiseMultiplier` to express the 10% business rule explicitly. The updates are wrapped in `beginUpdate()` / `endUpdate()` and performed through `Model.set()`. Store iteration uses `{ filtered: true }` so employees hidden by the current search filter are still included.
 
 The salary renderer formats the value with `Ext.util.Format.currency()`, applies the red text through the renderer's `metaData.tdStyle`, and HTML-encodes the returned string with `Ext.String.htmlEncode()`.
 
