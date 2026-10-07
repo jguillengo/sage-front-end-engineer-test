@@ -64,7 +64,7 @@ Ext.application({
                         xtype: 'button',
 
                         handler: function () {
-                            pues// Resolve the record currently associated with this recycled widget.
+                            // Resolve the record currently associated with this recycled widget.
                             var rec = this.getWidgetRecord(),
                                 active = !rec.get('active');
 
